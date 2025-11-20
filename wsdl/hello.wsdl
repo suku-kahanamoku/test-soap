@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="HelloService"
+             targetNamespace="http://localhost/test-soap/hello"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://localhost/test-soap/hello"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+
+  <!-- Define the message types -->
+  <message name="HelloRequest">
+    <part name="name" type="xsd:string"/>
+  </message>
+
+  <message name="HelloResponse">
+    <part name="greeting" type="xsd:string"/>
+  </message>
+
+  <message name="GetTimeRequest">
+  </message>
+
+  <message name="GetTimeResponse">
+    <part name="current_time" type="xsd:string"/>
+  </message>
+
+  <message name="AddRequest">
+    <part name="a" type="xsd:float"/>
+    <part name="b" type="xsd:float"/>
+  </message>
+
+  <message name="AddResponse">
+    <part name="result" type="xsd:float"/>
+  </message>
+
+  <!-- Authentication header -->
+  <message name="AuthHeader">
+    <part name="Security" element="wsse:Security"/>
+  </message>
+
+  <!-- Define the port type (interface) -->
+  <portType name="HelloPortType">
+    <operation name="sayHello">
+      <input message="tns:HelloRequest"/>
+      <output message="tns:HelloResponse"/>
+    </operation>
+    <operation name="getCurrentTime">
+      <input message="tns:GetTimeRequest"/>
+      <output message="tns:GetTimeResponse"/>
+    </operation>
+    <operation name="add">
+      <input message="tns:AddRequest"/>
+      <output message="tns:AddResponse"/>
+    </operation>
+  </portType>
+
+  <!-- Define the binding (protocol) -->
+  <binding name="HelloBinding" type="tns:HelloPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="sayHello">
+      <soap:operation soapAction="sayHello"/>
+      <input>
+        <soap:body use="encoded" namespace="urn:hello" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <soap:header message="tns:AuthHeader" part="Security" use="literal"/>
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:hello" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+    <operation name="getCurrentTime">
+      <soap:operation soapAction="getCurrentTime"/>
+      <input>
+        <soap:body use="encoded" namespace="urn:hello" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <soap:header message="tns:AuthHeader" part="Security" use="literal"/>
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:hello" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+    <operation name="add">
+      <soap:operation soapAction="add"/>
+      <input>
+        <soap:body use="encoded" namespace="urn:hello" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+        <soap:header message="tns:AuthHeader" part="Security" use="literal"/>
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:hello" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+  </binding>
+
+  <!-- Define the service -->
+  <service name="HelloService">
+    <documentation>Simple Hello World SOAP Service for learning - REQUIRES WS-Security UsernameToken authentication</documentation>
+    <port name="HelloPort" binding="tns:HelloBinding">
+      <soap:address location="http://localhost/php/test-soap/api/hello.php"/>
+    </port>
+  </service>
+
+</definitions>

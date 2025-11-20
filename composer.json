@@ -1,0 +1,21 @@
+{
+    "name": "test-soap/module",
+    "description": "Simple SOAP test module for learning SOAP and WSDL",
+    "type": "library",
+    "require": {
+        "php": ">=7.4",
+        "ext-soap": "*",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "autoload": {
+        "classmap": [
+            "lib/"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Developer",
+            "email": "dev@example.com"
+        }
+    ]
+}
